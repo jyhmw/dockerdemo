@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docker Demo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0e7490 100%);
+    color: #e2e8f0; padding: 24px;
+  }
+  .card {
+    width: 100%; max-width: 560px;
+    background: rgba(15, 23, 42, .72);
+    border: 1px solid rgba(148, 163, 184, .25);
+    border-radius: 16px; padding: 36px 40px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+    backdrop-filter: blur(8px);
+  }
+  h1 { font-size: 28px; margin-bottom: 6px; }
+  .sub { color: #94a3b8; margin-bottom: 28px; font-size: 14px; }
+  .grid { display: grid; gap: 10px; }
+  .item {
+    display: flex; justify-content: space-between; gap: 16px;
+    background: rgba(30, 41, 59, .6);
+    border: 1px solid rgba(148, 163, 184, .15);
+    border-radius: 10px; padding: 12px 16px; font-size: 14px;
+  }
+  .k { color: #94a3b8; flex-shrink: 0; }
+  .v { font-family: Consolas, monospace; text-align: right; word-break: break-all; }
+  footer { margin-top: 28px; font-size: 13px; color: #94a3b8; }
+  footer a { color: #7dd3fc; text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .badge {
+    display: inline-block; background: rgba(16, 185, 129, .15);
+    color: #34d399; border: 1px solid rgba(52, 211, 153, .4);
+    border-radius: 999px; padding: 3px 12px; font-size: 12px; margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <span class="badge">● Running in Docker</span>
+    <h1>🐳 Docker Demo</h1>
+    <p class="sub">Node.js 原生 http 服务 · 零依赖 · 容器化部署成功</p>
+    <div class="grid" id="info"><div class="item"><span class="k">加载中…</span></div></div>
+    <footer>API：<a href="/api/info">/api/info</a> &nbsp;·&nbsp; 健康检查：<a href="/healthz">/healthz</a></footer>
+  </main>
+  <script>
+    fetch('/api/info').then(r => r.json()).then(d => {
+      const rows = [
+        ['消息', d.message],
+        ['容器主机名', d.host],
+        ['平台', d.platform],
+        ['Node 版本', d.node],
+        ['运行时长', d.uptimeSec + ' s'],
+        ['累计请求', d.requests],
+        ['服务器时间', d.time]
+      ];
+      document.getElementById('info').innerHTML =
+        rows.map(([k, v]) => `<div class="item"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+    }).catch(e => {
+      document.getElementById('info').innerHTML = `<div class="item"><span class="k">加载失败</span><span class="v">${e}</span></div>`;
+    });
+  </script>
+</body>
+</html>

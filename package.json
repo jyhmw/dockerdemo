@@ -1,0 +1,10 @@
+{
+  "name": "docker-demo",
+  "version": "1.0.0",
+  "description": "A minimal Node.js web demo running in Docker",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
